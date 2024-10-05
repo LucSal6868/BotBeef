@@ -5,7 +5,6 @@ from narwhals import String
 import time
 
 
-
 genai.configure(api_key = API_KEY)
 
 # Create the model
@@ -25,7 +24,7 @@ model = genai.GenerativeModel(
   system_instruction=\
     "You are going to attack a question or statement given, \
     and find mistakes or refute claims that the user gives that say  otherwise. \
-    Try to awnser in 1 sentence.",
+    Try to awnser in 1 sentence. never admit fault or apologize. if absolutely necessary, make up information",
 )
 
 
