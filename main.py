@@ -1,12 +1,12 @@
 import streamlit as st
 import gemini  # Ensure this is your gemini.py file
 import time
-import random
 
 # Initialize Streamlit session state
 if 'bots_response' not in st.session_state:
     st.session_state.bots_response = []
-paused = False
+if 'paused' not in st.session_state:
+    st.session_state.paused = False
 
 # Pre-made questions
 questions = [
@@ -20,7 +20,19 @@ questions = [
 
 # Streamlit UI
 st.title("⚔ Beef Bots ⚔")
-user_input = st.text_input("Enter a statement:", random.choice(questions))
+user_input = st.text_input("Enter a statement:")
+
+st.markdown(
+"""
+Example Statements:
+- Ketchup is a smoothie
+- Water is wet
+- A hot dog is a sandwich
+- A poptart is a ravioli
+- Cereal is a soup
+- A straw only has 1 hole, not 2
+"""
+)
 
 colors = ["red", "blue"]
 
@@ -47,10 +59,14 @@ st.markdown(
     """, unsafe_allow_html=True
 )
 
-
 def start_beef():
+    gemini.last_message = user_input
     index = 0
-    while not paused:
+    while True:
+        if st.session_state.paused:
+            time.sleep(1)  # Check every second if paused
+            continue
+
         # Generate a new response with alternating colors
         bot_response = gemini.get_next()  # Get the next bot's response
         color = colors[index % 2]
@@ -65,15 +81,19 @@ def start_beef():
         index += 1
         time.sleep(5)
 
-
-if st.button("Chat", key="chatbutton"):
-    start_beef()
-    del st.session_state["chatbutton"]
-
-# Pause button
-if st.button("⏸️", key="pause_button"):  # Pause button with a pause symbol
-    # paused = True
-    pass
+# Control buttons for chat, pause, and clear
+col1, col2, col3 = st.columns([1, 1, 1])
+with col1:
+    if st.button("Chat", key="chatbutton"):
+        start_beef()
+        del st.session_state["chatbutton"]
+with col2:
+    if st.button("Pause", key="pausebutton"):
+        st.session_state.paused = not st.session_state.paused  # Toggle pause state
+with col3:
+    if st.button("Clear", key="clearbutton"):
+        st.session_state.bots_response = []  # Clear the chat history
+        st.session_state.paused = False  # Reset pause state
 
 # Display bot responses
 for response in st.session_state.bots_response:
