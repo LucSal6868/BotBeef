@@ -9,14 +9,14 @@ paused = False
 starter = 0;
 
 # Streamlit UI
-st.title("Banter Bots")
+st.title("⚔Beef Bots⚔️")
 user_input = st.text_area("Enter a statement:", height=150)
 
 def start_beef():
     index = 0
     while not paused:
 
-        new_variable = gemini.get_next()
+        new_variable = gemini.get_next() + ":[blue]"
         if st.write(new_variable, key="next_response_button" + str(index)):  # Button to get the next response
             st.session_state.bots_response.append(new_variable)  # Store the next bot's response
         index += 1
