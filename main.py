@@ -20,7 +20,19 @@ questions = [
 
 # Streamlit UI
 st.title("⚔ Beef Bots ⚔")
-user_input = st.text_input("Enter a statement:", random.choice(questions))
+user_input = st.text_input("Enter a statement:")
+
+st.markdown(
+"""
+Example Statements:
+- Ketchup is a smoothie
+- Water is wet
+- A hot dog is a sandwich
+- A poptart is a ravioli
+- Cereal is a soup
+- A straw only has 1 hole, not 2
+"""
+)
 
 colors = ["red", "blue"]
 
@@ -48,7 +60,10 @@ st.markdown(
 )
 
 
+
+
 def start_beef():
+    gemini.last_message = user_input
     index = 0
     while not paused:
         # Generate a new response with alternating colors
@@ -70,10 +85,6 @@ if st.button("Chat", key="chatbutton"):
     start_beef()
     del st.session_state["chatbutton"]
 
-# Pause button
-if st.button("⏸️", key="pause_button"):  # Pause button with a pause symbol
-    # paused = True
-    pass
 
 # Display bot responses
 for response in st.session_state.bots_response:

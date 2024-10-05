@@ -4,6 +4,7 @@ import os
 import google.generativeai as genai
 from google.generativeai import ChatSession
 from narwhals import String
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
 API_KEY = "AIzaSyCRUQPmk2oJWiQIa9f0m34VHKGAGHDiYNw"
 genai.configure(api_key=API_KEY)
@@ -26,6 +27,14 @@ model = genai.GenerativeModel(
         "Try to answer in 1 sentence. Never admit fault or apologize. "
         "If absolutely necessary, make up information."
     ),
+
+    safety_settings={
+        HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+        HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+        # HarmCategory.HARM_CATEGORY_UNSPECIFIED: HarmBlockThreshold.BLOCK_NONE,
+        HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+        HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+    }
 )
 
 chatbot_arr = [model.start_chat(history=[]),
