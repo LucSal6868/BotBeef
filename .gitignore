@@ -1,4 +1,6 @@
 .env
 myenv
 my_new_env
-__pycache__
+__pycache__/
+*.py[cod]
+
