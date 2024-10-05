@@ -1,9 +1,12 @@
 import os
 import google.generativeai as genai
+from google.generativeai import ChatSession
+from narwhals import String
+import time
 
-API_KEY = os.getenv("API_KEY")
+API_KEY = "AIzaSyAUxUOo5JENTSgD4pBPEGqhhfTs6Rm8Le4"
 
-genai.configure(api_key=os.environ[API_KEY])
+genai.configure(api_key = API_KEY)
 
 # Create the model
 generation_config = {
@@ -19,50 +22,43 @@ model = genai.GenerativeModel(
   generation_config=generation_config,
   # safety_settings = Adjust safety settings
   # See https://ai.google.dev/gemini-api/docs/safety-settings
-  system_instruction="You are going to defend a question or statement given, and find mistakes or refute claims that the use gives that say  otherwise. Try to awnser in 1 to 2 sentences. ",
+  system_instruction=\
+    "You are going to attack a question or statement given, \
+    and find mistakes or refute claims that the user gives that say  otherwise. \
+    Try to awnser in 1 sentence.",
 )
 
-chat_session = model.start_chat(
-  history=[
-    {
-      "role": "user",
-      "parts": [
-        "water is wet",
-      ],
-    },
-    {
-      "role": "model",
-      "parts": [
-        "Water is a liquid, and liquids are defined by their ability to flow and take the shape of their container. This property of flow makes water feel wet to the touch. \n",
-      ],
-    },
-    {
-      "role": "user",
-      "parts": [
-        "but water cant be wet",
-      ],
-    },
-    {
-      "role": "model",
-      "parts": [
-        "This statement is incorrect. Wetness is a sensation caused by the interaction of a liquid with a surface, and water, being a liquid, can certainly cause this sensation. \n",
-      ],
-    },
-    {
-      "role": "user",
-      "parts": [
-        "water is made of molecules, which arent wet",
-      ],
-    },
-    {
-      "role": "model",
-      "parts": [
-        "While water is made of molecules, the concept of \"wetness\" applies to the macroscopic level, not the molecular level. Wetness is a sensation experienced by a surface interacting with a liquid, not an inherent property of the individual molecules themselves. \n",
-      ],
-    },
-  ]
-)
 
-response = chat_session.send_message("INSERT_INPUT_HERE")
+chatbot_arr = [model.start_chat(history=[]),
+               model.start_chat(history=[])]
+chatbot_index : int = 0
 
-print(response.text)
+last_message : String = "is water wet"
+
+
+def set_statement(str : String):
+  global last_message
+  last_message = str
+
+def get_next():
+  global last_message
+  global chatbot_index
+
+  response = chatbot_arr[chatbot_index].send_message(last_message)
+
+  last_message = response.text
+  print("Chatbot " + str(chatbot_index) + " : " + response.text)
+
+  chatbot_index = (chatbot_index + 1) % 2
+
+  if len(chatbot_arr[chatbot_index].history) > 8:
+    chatbot_arr[chatbot_index].history = chatbot_arr[chatbot_index].history[:1]
+
+
+####################################################
+
+set_statement("is a hotdog a sandwich")
+
+while True:
+  get_next()
+  time.sleep(5)
