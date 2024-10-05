@@ -2,11 +2,12 @@
 
 import os
 import google.generativeai as genai
+import streamlit as st
 from google.generativeai import ChatSession
 from narwhals import String
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
-API_KEY = "AIzaSyCRUQPmk2oJWiQIa9f0m34VHKGAGHDiYNw"
+API_KEY = st.secrets["API_KEY"]
 genai.configure(api_key=API_KEY)
 
 # Create the model
