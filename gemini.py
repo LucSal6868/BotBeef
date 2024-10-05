@@ -4,7 +4,7 @@ from google.generativeai import ChatSession
 from narwhals import String
 import time
 
-API_KEY = "AIzaSyAUxUOo5JENTSgD4pBPEGqhhfTs6Rm8Le4"
+
 
 genai.configure(api_key = API_KEY)
 
