@@ -32,16 +32,24 @@ chatbot_arr = [model.start_chat(history=[]),
                 model.start_chat(history=[])]
 chatbot_index = 0
 
-def get_response(statement):
+last_message: str = "Is ketchup a drink"
+
+def get_next():
+    global last_message
     global chatbot_index
 
-    response = chatbot_arr[chatbot_index].send_message(statement)
-    answer = response.text
+    # Generate response from the current bot
+    response = chatbot_arr[chatbot_index].send_message(last_message)
+    last_message = response.text
 
-    chatbot_index = (chatbot_index + 1) % 2  # Switch between chatbots
+    # Print the response for debugging
+    print("Chatbot " + str(chatbot_index) + " : " + response.text)
 
-    # Maintain a history limit
+    # Switch to the next chatbot for the next turn
+    chatbot_index = (chatbot_index + 1) % 2
+
+    # Limit the history length for the current bot
     if len(chatbot_arr[chatbot_index].history) > 8:
         chatbot_arr[chatbot_index].history = chatbot_arr[chatbot_index].history[:1]
 
-    return answer
+    return last_message  # Return the last message for displaying it in the UI
