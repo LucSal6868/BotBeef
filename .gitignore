@@ -1,1 +1,4 @@
 .env
+myenv
+my_new_env
+__pycache__
