@@ -4,12 +4,12 @@ from google.generativeai import ChatSession
 from narwhals import String
 import time
 
-API_KEY = "AIzaSyAUxUOo5JENTSgD4pBPEGqhhfTs6Rm8Le4"
-genai.configure(api_key = API_KEY)
+key = 
+genai.configure(api_key = key)
 
 # Create the model
 generation_config = {
-  "temperature": 1,
+  "temperature": 2,
   "top_p": 0.95,
   "top_k": 64,
   "max_output_tokens": 64,
