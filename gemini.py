@@ -4,7 +4,7 @@ from google.generativeai import ChatSession
 from narwhals import String
 import time
 
-key = 
+key =
 genai.configure(api_key = key)
 
 # Create the model
@@ -39,7 +39,7 @@ def set_statement(str : String):
   global last_message
   last_message = str
 
-def get_next():
+def get_next() -> str:
   global last_message
   global chatbot_index
 
@@ -53,6 +53,7 @@ def get_next():
   if len(chatbot_arr[chatbot_index].history) > 8:
     chatbot_arr[chatbot_index].history = chatbot_arr[chatbot_index].history[:1]
 
+  return last_message
 
 ####################################################
 
