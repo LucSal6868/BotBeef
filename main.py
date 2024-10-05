@@ -25,6 +25,7 @@ user_input = st.text_input("Enter a statement:", random.choice(questions))
 colors = ["red", "blue"]
 
 def start_beef():
+    gemini.last_message = user_input
     index = 0
     while not paused:
         new_variable : str = f":{colors[index % 2]}[" + gemini.get_next() +"]"
