@@ -45,7 +45,8 @@ st.markdown(
         margin: 10px 0;
         border-radius: 10px;
         border: 2px solid;
-        width: fit-content;
+        width: 100%;  /* Set width to 100% */
+        box-sizing: border-box;  /* Include padding and border in width */
     }
     .red-box {
         border-color: red;
@@ -70,22 +71,22 @@ def start_beef():
         # Generate a new response with alternating colors
         bot_response = gemini.get_next()  # Get the next bot's response
         color = colors[index % 2]
-        styled_response = f'<div class="message-box {color}-box">Bot {index % 2 + 1}: {bot_response}</div>'
+        styled_response = f'<div class="message-box {color}-box">Bot {index % 2 + 1}: {bot_response}</div>'        # Store the response in session state
+        st.session_state.bots_response.append(styled_response)
 
         # Display the response with custom styling
         st.markdown(styled_response, unsafe_allow_html=True)
-
-        # Store the response in session state
-        st.session_state.bots_response.append(styled_response)
 
         index += 1
         time.sleep(5)
 
 # Control buttons for chat, pause, and clear
+spanner = False
 col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
     if st.button("Chat", key="chatbutton"):
-        start_beef()
+        spanner = True
+        #start_beef()
         del st.session_state["chatbutton"]
 with col2:
     if st.button("Pause", key="pausebutton"):
@@ -95,6 +96,12 @@ with col3:
         st.session_state.bots_response = []  # Clear the chat history
         st.session_state.paused = False  # Reset pause state
 
-# Display bot responses
-for response in st.session_state.bots_response:
-    st.markdown(response, unsafe_allow_html=True)
+if spanner is True:
+    start_beef()
+
+
+# Display bot responses in a separate full-width area
+if st.session_state.bots_response:
+    st.markdown("<hr>", unsafe_allow_html=True)  # Optional: Add a horizontal line before responses
+    for response in st.session_state.bots_response:
+        st.markdown(response, unsafe_allow_html=True)
