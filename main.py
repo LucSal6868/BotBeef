@@ -19,7 +19,7 @@ questions = [
 ]
 
 # Streamlit UI
-st.title("⚔ Beef Bots ⚔")
+st.title("⚔ Banter Bots ⚔")
 user_input = st.text_input("Enter a statement:")
 
 st.markdown(
